@@ -26,5 +26,6 @@ public class Cliente {
     private int telefonocliente;
     private String direccioncliente;
     private Boolean estadocliente;
+    private String contrasenacliente;
 
 }

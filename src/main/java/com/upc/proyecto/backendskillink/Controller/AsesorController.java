@@ -34,7 +34,7 @@ public class AsesorController {
 
 
     @GetMapping("/buscar/{id}")
-    @PreAuthorize("hasRole('ASESOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AsesorDTO> buscarPorId(@PathVariable("id") Long idasesor) {
         AsesorDTO asesor = asesorService.findByIdasesor(idasesor);
         return ResponseEntity.ok(asesor);
@@ -42,35 +42,35 @@ public class AsesorController {
 
 
     @DeleteMapping("/eliminar/{id}")
-    @PreAuthorize("hasRole('ASESOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminar(@PathVariable("id") Long idasesor) {
         asesorService.eliminar(idasesor);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/listar")
-    @PreAuthorize("hasRole('ASESOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AsesorDTO>> listar() {
         List<AsesorDTO> lista = asesorService.listar();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/listar/estado/{estado}")
-    @PreAuthorize("hasRole('ASESOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AsesorDTO>> listarPorEstado(@PathVariable("estado") Boolean estadoasesor) {
         List<AsesorDTO> lista = asesorService.listarporestadoasesor(estadoasesor);
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/listar/especialidad/{especialidad}")
-    @PreAuthorize("hasRole('ASESOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AsesorDTO>> listarPorEspecialidad(@PathVariable("especialidad") String especialidadasesor) {
         List<AsesorDTO> lista = asesorService.listarporespecialidadasesor(especialidadasesor);
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/buscar/especialidad/{especialidad}")
-    @PreAuthorize("hasRole('ASESOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AsesorDTO> buscarPorEspecialidad(@PathVariable("especialidad") String especialidadasesor) {
         AsesorDTO asesor = asesorService.findByEspecialidadasesor(especialidadasesor);
         return ResponseEntity.ok(asesor);
