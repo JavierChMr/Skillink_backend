@@ -20,7 +20,6 @@ public class Asesoria {
 
     @Column(unique = true)
     private String nombreasesoria;
-
     private String descripcionasesoria;
     private Double costoasesoria;
     private LocalDate fechasesoria;
