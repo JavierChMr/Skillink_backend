@@ -17,7 +17,7 @@ public class AsesoriaController {
     @Autowired
     private AsesoriaService asesoriaService;
 
-
+// negro tarado
     @PostMapping("/registrar")
     @PreAuthorize("hasRole('ASESOR')")
     public ResponseEntity<AsesoriaDTO> registrar(@Valid @RequestBody AsesoriaDTO asesoriaDTO) {
