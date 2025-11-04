@@ -27,6 +27,6 @@ public class Asesor {
     private String direccionasesor;
     private Boolean estadoasesor;
     private String especialidadasesor;
-    private String contrasenaasesor;
+    private String password;
 
 }

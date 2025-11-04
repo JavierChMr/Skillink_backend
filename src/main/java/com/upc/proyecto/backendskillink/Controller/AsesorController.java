@@ -4,6 +4,7 @@ import com.upc.proyecto.backendskillink.DTO.AsesorDTO;
 import com.upc.proyecto.backendskillink.DTO.AsesoriaDTO;
 import com.upc.proyecto.backendskillink.Service.AsesorService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,17 +14,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/skillink/asesor")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AsesorController {
     @Autowired
-    private AsesorService asesorService;
+    private final AsesorService asesorService;
+
 
     @PostMapping("/registrar")
-    @PreAuthorize("hasRole('ASESOR')")
-    public ResponseEntity<AsesorDTO> registrar(@Valid @RequestBody AsesorDTO asesorDTO) {
+    public ResponseEntity<AsesorDTO> registrar(@RequestBody AsesorDTO asesorDTO) {
         AsesorDTO nuevoAsesor = asesorService.registrar(asesorDTO);
         return ResponseEntity.ok(nuevoAsesor);
     }
 
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<AsesorDTO>> listar() {
+        return ResponseEntity.ok(asesorService.listar());
+    }
 
     @PutMapping("/actualizar")
     @PreAuthorize("hasRole('ASESOR')")
@@ -48,12 +56,7 @@ public class AsesorController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/listar")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AsesorDTO>> listar() {
-        List<AsesorDTO> lista = asesorService.listar();
-        return ResponseEntity.ok(lista);
-    }
+
 
     @GetMapping("/listar/estado/{estado}")
     @PreAuthorize("hasRole('ADMIN')")

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-//Clase que se encargara de generar y validar los tokens JWT.
+
 @Component
 public class JwtUtil {
 
@@ -40,16 +40,27 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
     }
 
+
+    public String generateToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, username);
+    }
+
     private String createToken(Map<String, Object> claims, String subject) {
-        //claims.put("roles", "ROLE_USER,ROLE_ADMIN"); // Aquí se puede agregar roles u otra info al token
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 20)) // 20 min
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

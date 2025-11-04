@@ -13,4 +13,5 @@ public interface AsesorRepository extends JpaRepository<Asesor,Long> {
     List<Asesor> findByEstadoasesor(Boolean estadoasesor);
     List<Asesor> findByEspecialidadasesor(String especialidadasesor);
     Optional<Asesor> findFirstByEspecialidadasesor(String especialidadasesor);
+    Optional<Asesor> findByNombreasesor(String nombreasesor);
 }

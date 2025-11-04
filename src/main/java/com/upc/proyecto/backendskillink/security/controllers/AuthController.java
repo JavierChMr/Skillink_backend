@@ -1,5 +1,9 @@
 package com.upc.proyecto.backendskillink.security.controllers;
 
+import com.upc.proyecto.backendskillink.Entities.Asesor;
+import com.upc.proyecto.backendskillink.Entities.Cliente;
+import com.upc.proyecto.backendskillink.Service.AsesorService;
+import com.upc.proyecto.backendskillink.Service.ClienteService;
 import com.upc.proyecto.backendskillink.security.dtos.AuthRequestDTO;
 import com.upc.proyecto.backendskillink.security.dtos.AuthResponseDTO;
 import com.upc.proyecto.backendskillink.security.services.CustomUserDetailsService;
@@ -8,54 +12,73 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
-//@CrossOrigin(origins = "${ip.frontend}")
-@CrossOrigin(origins = "${ip.frontend}", allowCredentials = "true", exposedHeaders = "Authorization") //para cloud
-//@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = "Authorization")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", exposedHeaders = "Authorization")
 @RestController
 @RequestMapping("/api")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final ClienteService clienteService;
+    private final AsesorService asesorService;
     private final CustomUserDetailsService userDetailsService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtUtil jwtUtil,
+                          ClienteService clienteService,
+                          AsesorService asesorService,
+                          CustomUserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.clienteService = clienteService;
+        this.asesorService = asesorService;
         this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthResponseDTO> createAuthenticationToken(@RequestBody @Valid AuthRequestDTO authRequest) throws Exception {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-        );
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthRequestDTO authRequest) {
+        try {
+            // Autenticación básica con Spring Security (texto plano)
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+            );
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        final String token = jwtUtil.generateToken(userDetails);
+            AuthResponseDTO response;
 
-        Set<String> roles = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
+            // Buscar como Cliente
+            Cliente cliente = clienteService.findByNombre(authRequest.getUsername());
+            if (cliente != null && cliente.getPassword().equals(authRequest.getPassword())) {
+                String token = jwtUtil.generateToken(cliente.getNombrecliente());
+                response = new AuthResponseDTO();
+                response.setJwt(token);
+                response.setRoles(Set.of("ROLE_USUARIO")); // ← Rol manual
+                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
+            }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Authorization", token);
-        AuthResponseDTO authResponseDTO = new AuthResponseDTO();
-        authResponseDTO.setRoles(roles);
-        authResponseDTO.setJwt(token);
-        return ResponseEntity.ok().headers(responseHeaders).body(authResponseDTO);
+            // Buscar como Asesor
+            Asesor asesor = asesorService.findByNombre(authRequest.getUsername());
+            if (asesor != null && asesor.getPassword().equals(authRequest.getPassword())) {
+                String token = jwtUtil.generateToken(asesor.getNombreasesor());
+                response = new AuthResponseDTO();
+                response.setJwt(token);
+                response.setRoles(Set.of("ROLE_ASESOR")); // ← Rol manual
+                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
+            }
+
+            // Usuario no encontrado o contraseña incorrecta
+            return ResponseEntity.status(401).body("Credenciales inválidas");
+
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(401).body("Credenciales inválidas");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error interno del servidor");
+        }
     }
-
 }
-
-

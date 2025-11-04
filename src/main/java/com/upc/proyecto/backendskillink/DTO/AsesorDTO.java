@@ -19,4 +19,5 @@ public class AsesorDTO {
     private String direccionasesor;
     private Boolean estadoasesor;
     private String especialidadasesor;
+    private String password;
 }

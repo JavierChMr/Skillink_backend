@@ -18,5 +18,5 @@ public class ClienteDTO {
     private int telefonocliente;
     private String direccioncliente;
     private Boolean estadocliente;
-
+    private String password;
 }

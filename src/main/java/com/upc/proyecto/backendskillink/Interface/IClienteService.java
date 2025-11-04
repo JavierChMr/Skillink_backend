@@ -11,4 +11,5 @@ public interface IClienteService {
     public void eliminar (Long idcliente);
     public List<ClienteDTO> listar();
     public List<ClienteDTO> listarporestadocliente(Boolean estadocliente);
+
 }

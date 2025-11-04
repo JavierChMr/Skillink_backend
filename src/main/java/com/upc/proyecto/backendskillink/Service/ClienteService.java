@@ -4,8 +4,11 @@ import com.upc.proyecto.backendskillink.DTO.ClienteDTO;
 import com.upc.proyecto.backendskillink.Entities.Cliente;
 import com.upc.proyecto.backendskillink.Interface.IClienteService;
 import com.upc.proyecto.backendskillink.Repository.ClienteRepository;
+import com.upc.proyecto.backendskillink.security.entities.User;
+import com.upc.proyecto.backendskillink.security.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +16,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClienteService implements IClienteService {
+
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder bcrypt;
 
     @Override
     public ClienteDTO findByIdcliente(Long idcliente) {
@@ -25,19 +33,33 @@ public class ClienteService implements IClienteService {
                 .orElse(null);
     }
 
-    @Override
-    public ClienteDTO registrar(ClienteDTO clienteDTO) {
-        Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
-        cliente.setIdcliente(null);
-        Cliente savedCliente = clienteRepository.save(cliente);
-        return modelMapper.map(savedCliente, ClienteDTO.class);
+
+    public ClienteDTO registrar(ClienteDTO dto) {
+        // Crear cliente
+        Cliente cliente = new Cliente();
+        cliente.setNombrecliente(dto.getNombrecliente());
+        cliente.setCorreocliente(dto.getCorreocliente());
+        cliente.setTelefonocliente(dto.getTelefonocliente());
+        cliente.setDireccioncliente(dto.getDireccioncliente());
+        cliente.setEstadocliente(dto.getEstadocliente());
+        cliente.setPassword(dto.getPassword());
+        clienteRepository.save(cliente);
+
+        // Crear usuario en sistema de seguridad
+        User user = new User();
+        user.setUsername(dto.getNombrecliente());
+        user.setPassword(bcrypt.encode(dto.getPassword()));
+        userService.save(user);
+
+        dto.setIdcliente(cliente.getIdcliente());
+        return dto;
     }
 
     @Override
     public ClienteDTO actualizar(ClienteDTO clienteDTO) {
         Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
-        Cliente UpdateCliente = clienteRepository.save(cliente);
-        return modelMapper.map(UpdateCliente, ClienteDTO.class);
+        Cliente updatedCliente = clienteRepository.save(cliente);
+        return modelMapper.map(updatedCliente, ClienteDTO.class);
     }
 
     @Override
@@ -47,16 +69,29 @@ public class ClienteService implements IClienteService {
 
     @Override
     public List<ClienteDTO> listar() {
-        return clienteRepository.findAll().stream()
-                .map(cliente -> modelMapper.map(cliente, ClienteDTO.class))
-                .toList();
+        return clienteRepository.findAll()
+                .stream()
+                .map(c -> new ClienteDTO(
+                        c.getIdcliente(),
+                        c.getNombrecliente(),
+                        c.getCorreocliente(),
+                        c.getTelefonocliente(),
+                        c.getDireccioncliente(),
+                        c.getEstadocliente(),
+                        c.getPassword()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ClienteDTO> listarporestadocliente(Boolean estadocliente) {
-        List<Cliente> clientes = clienteRepository.findByEstadocliente(estadocliente);
-        return clientes.stream()
+        return clienteRepository.findByEstadocliente(estadocliente)
+                .stream()
                 .map(c -> modelMapper.map(c, ClienteDTO.class))
                 .toList();
+    }
+
+    public Cliente findByNombre(String nombre) {
+        return clienteRepository.findByNombrecliente(nombre).orElse(null);
     }
 }
