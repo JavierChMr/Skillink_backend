@@ -16,4 +16,5 @@ public class AdministradorDTO {
     private String correoadmin;
     private int telefonoadmin;
     private String direccionadmin;
+    private String password;
 }

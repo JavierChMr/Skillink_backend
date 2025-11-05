@@ -19,14 +19,6 @@ public class AsesoriaService implements IAsesoriaService {
     @Autowired
     private ModelMapper modelMapper;
 
-
-    @Override
-    public AsesoriaDTO findByIdasesoria(Long idasesoria) {
-        return asesoriaRepository.findById(idasesoria)
-                .map(asesoria -> modelMapper.map(asesoria, AsesoriaDTO.class))
-                .orElse(null);
-    }
-
     @Override
     public AsesoriaDTO registrar(AsesoriaDTO asesoriaDTO) {
         Asesoria asesoria = modelMapper.map(asesoriaDTO, Asesoria.class);
@@ -44,16 +36,24 @@ public class AsesoriaService implements IAsesoriaService {
     }
 
     @Override
-    public void eliminar(Long idasesoria) {
+    public AsesoriaDTO findByIdasesoria(Long idasesoria) {
+        return asesoriaRepository.findById(idasesoria)
+                .map(asesoria -> modelMapper.map(asesoria, AsesoriaDTO.class))
+                .orElse(null);
+    }
+
+    @Override
+    public void eliminarasesoria(Long idasesoria) {
         asesoriaRepository.deleteById(idasesoria);
     }
 
     @Override
-    public List<AsesoriaDTO> listar() {
+    public List<AsesoriaDTO> listarasesoria() {
         return asesoriaRepository.findAll().stream()
                 .map(asesoria -> modelMapper.map(asesoria, AsesoriaDTO.class))
                 .toList();
     }
+
 
     @Override
     public List<AsesoriaDTO> listarporfechasesoria(LocalDate fechasesoria) {

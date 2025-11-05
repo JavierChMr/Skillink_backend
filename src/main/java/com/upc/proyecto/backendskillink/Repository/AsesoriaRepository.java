@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface AsesoriaRepository extends JpaRepository<Asesoria, Long> {
     List<Asesoria> findByFechasesoria(LocalDate fechasesoria);
+
 }

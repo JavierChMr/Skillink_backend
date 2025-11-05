@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<Cliente> findByEstadocliente(Boolean estadocliente);
     Optional<Cliente> findByNombrecliente(String nombrecliente);

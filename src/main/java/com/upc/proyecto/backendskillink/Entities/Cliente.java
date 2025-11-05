@@ -29,4 +29,7 @@ public class Cliente {
     @Column(nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "idadministrador")
+    private Administrador administrador;
 }

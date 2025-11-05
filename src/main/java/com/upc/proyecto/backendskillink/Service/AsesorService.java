@@ -65,21 +65,18 @@ public class AsesorService implements IAsesorService {
         return modelMapper.map(updatedAsesor, AsesorDTO.class);
     }
 
-
     @Override
-    public void eliminar(Long idasesor) {
+    public void eliminarasesor(Long idasesor) {
         asesorRepository.deleteById(idasesor);
     }
 
-
     @Override
-    public List<AsesorDTO> listar() {
+    public List<AsesorDTO> listarasesor() {
         return asesorRepository.findAll()
                 .stream()
                 .map(asesor -> modelMapper.map(asesor, AsesorDTO.class))
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public List<AsesorDTO> listarporestadoasesor(Boolean estadoasesor) {

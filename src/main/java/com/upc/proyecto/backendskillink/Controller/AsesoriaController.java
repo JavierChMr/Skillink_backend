@@ -19,7 +19,6 @@ public class AsesoriaController {
 
 
     @PostMapping("/registrar")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AsesoriaDTO> registrar(@Valid @RequestBody AsesoriaDTO asesoriaDTO) {
         AsesoriaDTO nuevaAsesoria = asesoriaService.registrar(asesoriaDTO);
         return ResponseEntity.ok(nuevaAsesoria);
@@ -27,40 +26,10 @@ public class AsesoriaController {
 
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AsesoriaDTO> actualizar(@Valid @RequestBody AsesoriaDTO asesoriaDTO) {
         AsesoriaDTO asesoriaActualizada = asesoriaService.actualizar(asesoriaDTO);
         return ResponseEntity.ok(asesoriaActualizada);
     }
 
 
-    @GetMapping("/buscar/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AsesoriaDTO> buscarPorId(@PathVariable("id") Long idasesoria) {
-        AsesoriaDTO asesoria = asesoriaService.findByIdasesoria(idasesoria);
-        return ResponseEntity.ok(asesoria);
-    }
-
-
-    @DeleteMapping("/eliminar/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> eliminar(@PathVariable("id") Long idasesoria) {
-        asesoriaService.eliminar(idasesoria);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/listar")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AsesoriaDTO>> listar() {
-        List<AsesoriaDTO> lista = asesoriaService.listar();
-        return ResponseEntity.ok(lista);
-    }
-
-
-    @GetMapping("/listar/{fecha}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AsesoriaDTO>> listarPorFecha(@RequestParam("fecha") LocalDate fechasesoria) {
-        List<AsesoriaDTO> lista = asesoriaService.listarporfechasesoria(fechasesoria);
-        return ResponseEntity.ok(lista);
-    }
 }

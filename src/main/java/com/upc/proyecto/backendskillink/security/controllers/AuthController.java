@@ -1,7 +1,9 @@
 package com.upc.proyecto.backendskillink.security.controllers;
 
+import com.upc.proyecto.backendskillink.Entities.Administrador;
 import com.upc.proyecto.backendskillink.Entities.Asesor;
 import com.upc.proyecto.backendskillink.Entities.Cliente;
+import com.upc.proyecto.backendskillink.Service.AdministradorService;
 import com.upc.proyecto.backendskillink.Service.AsesorService;
 import com.upc.proyecto.backendskillink.Service.ClienteService;
 import com.upc.proyecto.backendskillink.security.dtos.AuthRequestDTO;
@@ -28,17 +30,20 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final ClienteService clienteService;
     private final AsesorService asesorService;
+    private final AdministradorService administradorService;
     private final CustomUserDetailsService userDetailsService;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil,
                           ClienteService clienteService,
                           AsesorService asesorService,
+                          AdministradorService administradorService,
                           CustomUserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.clienteService = clienteService;
         this.asesorService = asesorService;
+        this.administradorService = administradorService;
         this.userDetailsService = userDetailsService;
     }
 
@@ -71,6 +76,18 @@ public class AuthController {
                 response.setRoles(Set.of("ROLE_ASESOR")); // ← Rol manual
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
             }
+
+            // Buscar como Admin
+            Administrador administrador = administradorService.findByNombre(authRequest.getUsername());
+            if (administrador != null && administrador.getPassword().equals(authRequest.getPassword())) {
+                String token = jwtUtil.generateToken(administrador.getNombreadmin());
+                response = new AuthResponseDTO();
+                response.setJwt(token);
+                response.setRoles(Set.of("ROLE_ADMIN")); // ← Rol manual
+                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
+            }
+
+
 
             // Usuario no encontrado o contraseña incorrecta
             return ResponseEntity.status(401).body("Credenciales inválidas");

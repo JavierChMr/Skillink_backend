@@ -26,14 +26,6 @@ public class ClienteService implements IClienteService {
     @Autowired
     private PasswordEncoder bcrypt;
 
-    @Override
-    public ClienteDTO findByIdcliente(Long idcliente) {
-        return clienteRepository.findById(idcliente)
-                .map(cliente -> modelMapper.map(cliente, ClienteDTO.class))
-                .orElse(null);
-    }
-
-
     public ClienteDTO registrar(ClienteDTO dto) {
         // Crear cliente
         Cliente cliente = new Cliente();
@@ -63,25 +55,25 @@ public class ClienteService implements IClienteService {
     }
 
     @Override
-    public void eliminar(Long idcliente) {
+    public ClienteDTO findByIdcliente(Long idcliente) {
+        return clienteRepository.findById(idcliente)
+                .map(cliente -> modelMapper.map(cliente, ClienteDTO.class))
+                .orElse(null);
+    }
+
+    @Override
+    public void eliminarcliente(Long idcliente) {
         clienteRepository.deleteById(idcliente);
     }
 
     @Override
-    public List<ClienteDTO> listar() {
+    public List<ClienteDTO> listarcliente() {
         return clienteRepository.findAll()
                 .stream()
-                .map(c -> new ClienteDTO(
-                        c.getIdcliente(),
-                        c.getNombrecliente(),
-                        c.getCorreocliente(),
-                        c.getTelefonocliente(),
-                        c.getDireccioncliente(),
-                        c.getEstadocliente(),
-                        c.getPassword()
-                ))
-                .collect(Collectors.toList());
+                .map(c -> modelMapper.map(c, ClienteDTO.class))
+                .toList();
     }
+
 
     @Override
     public List<ClienteDTO> listarporestadocliente(Boolean estadocliente) {
