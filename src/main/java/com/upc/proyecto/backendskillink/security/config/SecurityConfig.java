@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/authenticate").permitAll()
                         .requestMatchers("/api/skillink/usuario/registrar").permitAll()
                         .requestMatchers("/api/skillink/asesor/registrar").permitAll()
-                        .requestMatchers("/api/skillink/administrador/registrar").permitAll()
+                        .requestMatchers("/api/skillink/administrador/**").permitAll()
                         // Todos los demás requieren autenticación
                         .anyRequest().authenticated()
                 )
