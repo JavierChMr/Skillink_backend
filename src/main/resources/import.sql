@@ -1,10 +1,7 @@
-INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
-INSERT INTO roles (name) VALUES ('ROLE_USUARIO');
-INSERT INTO roles (name) VALUES ('ROLE_ASESOR');
-INSERT INTO users (username,password) VALUES ('admin', '$2a$12$HBNi0DfQBqnWM3FKmYt98O5sQ6hUweox84agGSD5vM1mQFpKR2Mm2');
-INSERT INTO users (username,password) VALUES ('usuario1','$2a$12$HBNi0DfQBqnWM3FKmYt98O5sQ6hUweox84agGSD5vM1mQFpKR2Mm2');
-INSERT INTO users (username,password) VALUES ('asesor1','$2a$12$HBNi0DfQBqnWM3FKmYt98O5sQ6hUweox84agGSD5vM1mQFpKR2Mm2');
-INSERT INTO user_roles (user_id,role_id) VALUES (1,1);
-INSERT INTO user_roles (user_id,role_id) VALUES (2,2);
-INSERT INTO user_roles (user_id,role_id) VALUES (3,3);
-
+INSERT INTO roles(name) VALUES ('ADMIN')
+INSERT INTO administrador (nombreadmin, correoadmin, telefonoadmin, direccionadmin, "password")
+VALUES ('admin1', 'admin1@example.com', 987654321, 'Av. Ejemplo 123', '12345');
+INSERT INTO users (username, password)
+VALUES ('admin1', '12345');
+INSERT INTO user_roles (user_id, role_id)
+VALUES (1, 1);
