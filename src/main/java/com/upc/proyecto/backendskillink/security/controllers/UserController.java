@@ -37,9 +37,11 @@ public class UserController {
 
     @PostMapping("/save/{user_id}/{rol_id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Integer> saveUseRol(@PathVariable("user_id") Long user_id,
-                                              @PathVariable("rol_id") Long rol_id){
-        return new ResponseEntity<Integer>(userService.insertUserRol(user_id, rol_id), HttpStatus.OK);
-        //return new ResponseEntity<Integer>(uService.insertUserRol2(user_id, rol_id),HttpStatus.OK);
+    public ResponseEntity<Void> saveUserRol(@PathVariable("user_id") Long user_id,
+                                            @PathVariable("rol_id") Long rol_id) {
+
+        userService.insertUserRole(user_id, rol_id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

@@ -29,7 +29,7 @@ public class Asesor {
     private String especialidadasesor;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "idadministrador")
-    private Administrador administrador;
+//    @ManyToOne
+//    @JoinColumn(name = "idadministrador")
+//    private Administrador administrador;
 }

@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query(value = "SELECT * FROM users u WHERE u.username = :username", nativeQuery = true)
     Optional<User> findByUsername(String username);
 
-    @Transactional
     @Modifying
-    @Query(value = "INSERT INTO user_roles (user_id, role_id ) VALUES (:user_id, :rol_id)", nativeQuery = true)
-    public Integer insertUserRol(@Param("user_id") Long user_id, @Param("rol_id") Long rol_id);
+    @Query(value = "INSERT INTO user_roles(user_id, role_id) VALUES (:userId, :roleId)", nativeQuery = true)
+    void insertUserRol(@Param("userId") Long userId, @Param("roleId") Long roleId);
 }

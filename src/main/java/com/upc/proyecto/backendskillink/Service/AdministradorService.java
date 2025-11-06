@@ -37,21 +37,25 @@ public class AdministradorService implements IAdministradorService {
 
     @Override
     public AdministradorDTO registrar(AdministradorDTO dto) {
-        // Crear asesor
         Administrador administrador = new Administrador();
         administrador.setNombreadmin(dto.getNombreadmin());
         administrador.setCorreoadmin(dto.getCorreoadmin());
         administrador.setTelefonoadmin(dto.getTelefonoadmin());
         administrador.setDireccionadmin(dto.getDireccionadmin());
-        administrador.setPassword(dto.getPassword()); // texto plano para pruebas
+        administrador.setPassword(dto.getPassword());
 
         Administrador savedAdmin = administradorRepository.save(administrador);
 
-        // Crear usuario en sistema de seguridad
         User user = new User();
-        user.setUsername(dto.getNombreadmin()); // nombre como username
-        user.setPassword(dto.getPassword()); // texto plano
-        userService.save(user);
+        user.setUsername(dto.getNombreadmin());
+        user.setPassword(dto.getPassword());
+
+        userService.save(user); // no devuelve nada
+
+        Long userId = userService.findByUsername(dto.getNombreadmin()).getId();
+        Long roleId = userService.findRoleIdByName("ADMIN");
+
+        userService.insertUserRole(userId, roleId);
 
         return modelMapper.map(savedAdmin, AdministradorDTO.class);
     }
@@ -64,6 +68,10 @@ public class AdministradorService implements IAdministradorService {
         return modelMapper.map(savedAdministrador, AdministradorDTO.class);
     }
 
+
+    public Administrador findByNombre(String nombre) {
+        return administradorRepository.findByNombreadmin(nombre).orElse(null);
+    }
 //    @Override
 //    public void eliminarasesoria(Long idasesoria) {
 //        asesoriaRepository.deleteById(idasesoria);
@@ -159,9 +167,7 @@ public class AdministradorService implements IAdministradorService {
 //    }
 
 
-    public Administrador findByNombre(String nombre) {
-        return administradorRepository.findByNombreadmin(nombre).orElse(null);
-    }
+
 
 
 }

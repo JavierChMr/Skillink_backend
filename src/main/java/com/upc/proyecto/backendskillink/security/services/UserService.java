@@ -25,10 +25,18 @@ public class UserService {
     public void grabar(Role role) {
         roleRepository.save(role);
     }
-    public Integer insertUserRol(Long user_id, Long rol_id) {
-        Integer result = 0;
-        userRepository.insertUserRol(user_id, rol_id);
-        return 1;
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public Long findRoleIdByName(String name) {
+        return roleRepository.getRoleIdByName(name);
+    }
+
+    @Transactional
+    public void insertUserRole(Long userId, Long roleId) {
+        userRepository.insertUserRol(userId, roleId);
     }
 
 }

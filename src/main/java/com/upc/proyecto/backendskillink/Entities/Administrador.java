@@ -27,14 +27,14 @@ public class Administrador {
     private String direccionadmin;
     private String password;
 
-    // Un administrador puede gestionar varios asesores
-    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
-    private List<Asesor> asesores;
-
-    // Un administrador puede gestionar varios clientes
-    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
-    private List<Cliente> clientes;
-
-    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
-    private List<Asesoria>  asesorias;
+//    // Un administrador puede gestionar varios asesores
+//    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
+//    private List<Asesor> asesores;
+//
+//    // Un administrador puede gestionar varios clientes
+//    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
+//    private List<Cliente> clientes;
+//
+//    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
+//    private List<Asesoria>  asesorias;
 }

@@ -32,8 +32,8 @@ public class Asesoria {
     @JoinColumn(name = "idasesor")
     private Asesor asesor;
 
-    @ManyToOne
-    @JoinColumn(name = "idadministrador")
-    private Administrador administrador;
+//    @ManyToOne
+//    @JoinColumn(name = "idadministrador")
+//    private Administrador administrador;
 
 }

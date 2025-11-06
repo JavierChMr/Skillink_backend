@@ -18,7 +18,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idcliente;
 
-    @Column(unique = true)
+//    @Column(unique = true)
     private String nombrecliente;
 
     private String correocliente;
@@ -29,7 +29,7 @@ public class Cliente {
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "idadministrador")
-    private Administrador administrador;
+//    @ManyToOne
+//    @JoinColumn(name = "idadministrador")
+//    private Administrador administrador;
 }
