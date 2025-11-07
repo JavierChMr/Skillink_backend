@@ -35,6 +35,4 @@ public class AsesoriaController {
     public List<AsesoriaDTO> listarAsesorias() {
         return asesoriaService.listarasesoria();
     }
-
-
 }

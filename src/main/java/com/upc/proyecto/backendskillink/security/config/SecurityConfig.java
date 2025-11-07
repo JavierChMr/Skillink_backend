@@ -1,5 +1,3 @@
-
-
 package com.upc.proyecto.backendskillink.security.config;
 
 import com.upc.proyecto.backendskillink.security.filters.JwtRequestFilter;
@@ -17,6 +15,9 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,40 +32,51 @@ public class SecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    // Bean para gestionar la autenticación
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Cambiado a NoOpPasswordEncoder para texto plano
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // compara texto plano
+        return NoOpPasswordEncoder.getInstance(); // texto plano
     }
 
-    // Configuración principal de seguridad
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> {}) // habilita CORS usando la lambda
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
                         .requestMatchers("/api/authenticate").permitAll()
                         .requestMatchers("/api/skillink/usuario/registrar").permitAll()
                         .requestMatchers("/api/skillink/asesor/registrar").permitAll()
                         .requestMatchers("/api/skillink/administrador/**").permitAll()
-                        // Todos los demás requieren autenticación
+                        .requestMatchers("/api/skillink/asesoria/**").permitAll()
+                        .requestMatchers("/api/asesorias/**").permitAll()
+                        .requestMatchers("/Imagenes/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                // Modo sin estado
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        // Agregar filtro JWT antes del filtro estándar de autenticación
+        // JWT filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // Bean CORS para permitir requests desde Angular
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:4200"); // origen Angular
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
