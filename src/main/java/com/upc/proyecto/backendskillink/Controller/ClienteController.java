@@ -32,4 +32,9 @@ public class ClienteController {
         return ResponseEntity.ok(clienteActualizado);
     }
 
+    @GetMapping("/listar")
+    public List<ClienteDTO> listarClientes() {
+        return clienteService.listarcliente();
+    }
+
 }

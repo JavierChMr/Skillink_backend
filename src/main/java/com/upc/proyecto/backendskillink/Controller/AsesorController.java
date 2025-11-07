@@ -33,4 +33,9 @@ public class AsesorController {
         return ResponseEntity.ok(asesorActualizado);
     }
 
+    @GetMapping("/listar")
+    public List<AsesorDTO> listarAsesores() {
+        return asesorService.listarasesor();
+    }
+
 }
