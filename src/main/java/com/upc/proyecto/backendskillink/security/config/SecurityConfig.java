@@ -49,8 +49,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/authenticate").permitAll()
-                        .requestMatchers("/api/skillink/usuario/registrar").permitAll()
-                        .requestMatchers("/api/skillink/asesor/registrar").permitAll()
+                        .requestMatchers("/api/skillink/usuario/**").permitAll()
+                        .requestMatchers("/api/skillink/asesor/**").permitAll()
                         .requestMatchers("/api/skillink/administrador/**").permitAll()
                         .requestMatchers("/api/skillink/asesoria/**").permitAll()
                         .requestMatchers("/api/asesorias/**").permitAll()

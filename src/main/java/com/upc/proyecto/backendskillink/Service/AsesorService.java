@@ -35,24 +35,29 @@ public class AsesorService implements IAsesorService {
 
 
     @Override
-    public AsesorDTO registrar(AsesorDTO asesorDTO) {
+    public AsesorDTO registrar(AsesorDTO dto) {
         // Crear asesor
         Asesor asesor = new Asesor();
-        asesor.setNombreasesor(asesorDTO.getNombreasesor());
-        asesor.setCorreoasesor(asesorDTO.getCorreoasesor());
-        asesor.setTelefonoasesor(asesorDTO.getTelefonoasesor());
-        asesor.setDireccionasesor(asesorDTO.getDireccionasesor());
-        asesor.setEstadoasesor(asesorDTO.getEstadoasesor());
-        asesor.setEspecialidadasesor(asesorDTO.getEspecialidadasesor());
-        asesor.setPassword(asesorDTO.getPassword()); // texto plano para pruebas
+        asesor.setNombreasesor(dto.getNombreasesor());
+        asesor.setCorreoasesor(dto.getCorreoasesor());
+        asesor.setTelefonoasesor(dto.getTelefonoasesor());
+        asesor.setDireccionasesor(dto.getDireccionasesor());
+        asesor.setEstadoasesor(dto.getEstadoasesor());
+        asesor.setEspecialidadasesor(dto.getEspecialidadasesor());
+        asesor.setPassword(dto.getPassword());
 
         Asesor savedAsesor = asesorRepository.save(asesor);
 
-        // Crear usuario en sistema de seguridad
         User user = new User();
-        user.setUsername(asesorDTO.getNombreasesor()); // nombre como username
-        user.setPassword(asesorDTO.getPassword()); // texto plano
+        user.setUsername(dto.getNombreasesor());
+        user.setPassword(dto.getPassword());
+
         userService.save(user);
+
+        Long userId = userService.findByUsername(dto.getNombreasesor()).getId();
+        Long roleId = userService.findRoleIdByName("ASESOR");
+
+        userService.insertUserRole(userId, roleId);
 
         return modelMapper.map(savedAsesor, AsesorDTO.class);
     }

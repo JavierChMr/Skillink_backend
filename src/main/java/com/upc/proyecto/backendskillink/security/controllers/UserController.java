@@ -21,7 +21,7 @@ public class UserController {
     private PasswordEncoder bcrypt;
 
     @PostMapping("/user")
-    @PreAuthorize("hasRole('ADMIN')")
+
     public void createUser(@RequestBody User user) {
         String bcryptPassword = bcrypt.encode(user.getPassword());
         user.setPassword(bcryptPassword);
@@ -29,14 +29,14 @@ public class UserController {
     }
 
     @PostMapping("/rol")
-    @PreAuthorize("hasRole('ADMIN')")
+
     public void createRol(@RequestBody Role rol) {
            userService.grabar(rol);
     }
 
 
     @PostMapping("/save/{user_id}/{rol_id}")
-    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<Void> saveUserRol(@PathVariable("user_id") Long user_id,
                                             @PathVariable("rol_id") Long rol_id) {
 

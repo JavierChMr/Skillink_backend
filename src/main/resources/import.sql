@@ -1,10 +1,21 @@
+-- roles --
 INSERT INTO roles(name) VALUES ('ADMIN');
+INSERT INTO roles(name) VALUES ('USUARIO');
+INSERT INTO roles(name) VALUES ('ASESOR');
+
+-- ADMINISTRADOR --
 INSERT INTO administrador (nombreadmin, correoadmin, telefonoadmin, direccionadmin, "password")
 VALUES ('admin1', 'admin1@example.com', 987654321, 'Av. Ejemplo 123', '12345');
+
+-- USER ADMIN --
 INSERT INTO users (username, password)
 VALUES ('admin1', '12345');
+
+-- ROLE ADMIN --
 INSERT INTO user_roles (user_id, role_id)
 VALUES (1, 1);
+
+-- CLIENTE --
 INSERT INTO Cliente (nombrecliente, correocliente, telefonocliente, direccioncliente, estadocliente, password)
 VALUES
     ('María Fernández', 'mariaf@gmail.com', 987654321, 'Av. Arequipa 1234', TRUE, 'maria123'),
@@ -13,46 +24,195 @@ VALUES
     ('Jorge Salazar', 'jorge.s@gmail.com', 911223344, 'Av. Javier Prado 1500', TRUE, 'jorge321'),
     ('Ana Torres', 'ana.torres@gmail.com', 900112233, 'Psje. Las Flores 234', TRUE, 'ana654');
 
+-- USER CLIENTE --
+
+INSERT INTO users (username, password)
+VALUES ('María Fernández', 'maria123');
+INSERT INTO users (username, password)
+VALUES ('Carlos Rojas', 'carlos456');
+INSERT INTO users (username, password)
+VALUES ('Lucía Gutiérrez', 'lucia789');
+INSERT INTO users (username, password)
+VALUES ('Jorge Salazar', 'jorge321');
+INSERT INTO users (username, password)
+VALUES ('Ana Torres', 'ana654');
+
+-- ROLE CLIENTE --
+INSERT INTO user_roles (user_id, role_id)
+VALUES (2, 2);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (3, 2);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (4, 2);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (5, 2);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (6, 2);
+
+
+--ASESOR--
 INSERT INTO asesor (nombreasesor, correoasesor, telefonoasesor, direccionasesor, estadoasesor, especialidadasesor, password)
 VALUES
--- Programación
+-- Programación --
 ('Luis Ramírez', 'luis.ramirez@skilllink.com', 987654321, 'Av. Arequipa 1020', TRUE, 'Programación', 'luis123'),
 ('María Quispe', 'maria.quispe@skilllink.com', 912345678, 'Jr. Los Álamos 230', TRUE, 'Programación', 'maria123'),
 ('José Castillo', 'jose.castillo@skilllink.com', 976543210, 'Av. Benavides 455', TRUE, 'Programación', 'jose123'),
 ('Andrea Paredes', 'andrea.paredes@skilllink.com', 945612378, 'Calle Lima 880', TRUE, 'Programación', 'andrea123'),
 ('Carlos Díaz', 'carlos.diaz@skilllink.com', 900112233, 'Psje. Miraflores 45', TRUE, 'Programación', 'carlos123'),
 
--- Marketing
+-- Marketing --
 ('Daniela Torres', 'daniela.torres@skilllink.com', 998877665, 'Av. Brasil 345', TRUE, 'Marketing', 'daniela123'),
 ('Fernando López', 'fernando.lopez@skilllink.com', 911223344, 'Jr. Los Rosales 78', TRUE, 'Marketing', 'fernando123'),
 ('Laura Vega', 'laura.vega@skilllink.com', 954321789, 'Calle Las Magnolias 67', TRUE, 'Marketing', 'laura123'),
 ('Ricardo Chávez', 'ricardo.chavez@skilllink.com', 901234567, 'Av. San Luis 432', TRUE, 'Marketing', 'ricardo123'),
 ('Sofía Medina', 'sofia.medina@skilllink.com', 980765432, 'Jr. Los Pinos 901', TRUE, 'Marketing', 'sofia123'),
 
--- Diseño
+-- Diseño --
 ('Valeria Campos', 'valeria.campos@skilllink.com', 978654123, 'Av. Primavera 780', TRUE, 'Diseño', 'valeria123'),
 ('Diego Alarcón', 'diego.alarcon@skilllink.com', 987321456, 'Calle Olivos 102', TRUE, 'Diseño', 'diego123'),
 ('Paula Ramos', 'paula.ramos@skilllink.com', 956789123, 'Av. Angamos 556', TRUE, 'Diseño', 'paula123'),
 ('Javier Méndez', 'javier.mendez@skilllink.com', 922334455, 'Jr. Los Jazmines 890', TRUE, 'Diseño', 'javier123'),
 ('Camila Soto', 'camila.soto@skilllink.com', 933221144, 'Psje. Las Gardenias 304', TRUE, 'Diseño', 'camila123'),
 
--- Idiomas
+-- Idiomas --
 ('Andrés Navarro', 'andres.navarro@skilllink.com', 955667788, 'Av. Salaverry 250', TRUE, 'Idiomas', 'andres123'),
 ('Patricia León', 'patricia.leon@skilllink.com', 977889900, 'Calle Bolívar 330', TRUE, 'Idiomas', 'patricia123'),
 ('Santiago Ruiz', 'santiago.ruiz@skilllink.com', 922110099, 'Av. Grau 890', TRUE, 'Idiomas', 'santiago123'),
 ('Carolina Pérez', 'carolina.perez@skilllink.com', 944556677, 'Jr. Los Laureles 560', TRUE, 'Idiomas', 'carolina123'),
 ('Héctor Gálvez', 'hector.galvez@skilllink.com', 933445566, 'Calle Trujillo 129', TRUE, 'Idiomas', 'hector123'),
 
--- Negocios
+-- Negocios --
 ('Gabriela Rojas', 'gabriela.rojas@skilllink.com', 955223344, 'Av. Canadá 760', TRUE, 'Negocios', 'gabriela123'),
 ('Eduardo Flores', 'eduardo.flores@skilllink.com', 966778899, 'Calle Montecarlo 100', TRUE, 'Negocios', 'eduardo123'),
 ('Natalia Ibáñez', 'natalia.ibanez@skilllink.com', 977665544, 'Jr. Las Acacias 450', TRUE, 'Negocios', 'natalia123'),
 ('Martín Herrera', 'martin.herrera@skilllink.com', 911009988, 'Av. Colonial 300', TRUE, 'Negocios', 'martin123'),
 ('Rosa Delgado', 'rosa.delgado@skilllink.com', 922776655, 'Psje. La Marina 50', TRUE, 'Negocios', 'rosa123');
 
+-- USER ASESOR --
+
+-- Programación --
+
+INSERT INTO users (username, password)
+VALUES ('Luis Ramírez', 'luis123');
+INSERT INTO users (username, password)
+VALUES ('María Quispe', 'maria123');
+INSERT INTO users (username, password)
+VALUES ('José Castillo', 'jose123');
+INSERT INTO users (username, password)
+VALUES ('Andrea Paredes', 'andrea123');
+INSERT INTO users (username, password)
+VALUES ('Carlos Díaz', 'carlos123');
+
+-- Marketing --
+
+INSERT INTO users (username, password)
+VALUES ('Daniela Torres', 'daniela123');
+INSERT INTO users (username, password)
+VALUES ('Fernando López', 'fernando123');
+INSERT INTO users (username, password)
+VALUES ('Laura Vega', 'laura123');
+INSERT INTO users (username, password)
+VALUES ('Ricardo Chávez', 'ricardo123');
+INSERT INTO users (username, password)
+VALUES ('Sofía Medina', 'sofia123');
+
+-- Diseño --
+
+INSERT INTO users (username, password)
+VALUES ('Valeria Campos', 'valeria123');
+INSERT INTO users (username, password)
+VALUES ('Diego Alarcón', 'diego123');
+INSERT INTO users (username, password)
+VALUES ('Paula Ramos', 'paula123');
+INSERT INTO users (username, password)
+VALUES ('Javier Méndez', 'javier123');
+INSERT INTO users (username, password)
+VALUES ('Camila Soto', 'camila123');
+
+-- Idiomas --
+
+INSERT INTO users (username, password)
+VALUES ('Andrés Navarro', 'andres123');
+INSERT INTO users (username, password)
+VALUES ('Patricia León', 'patricia123');
+INSERT INTO users (username, password)
+VALUES ('Santiago Ruiz', 'santiago123');
+INSERT INTO users (username, password)
+VALUES ('Carolina Pérez', 'carolina123');
+INSERT INTO users (username, password)
+VALUES ('Héctor Gálvez', 'hector123');
+
+-- Negocios --
+
+INSERT INTO users (username, password)
+VALUES ('Gabriela Rojas', 'gabriela123');
+INSERT INTO users (username, password)
+VALUES ('Eduardo Flores', 'eduardo123');
+INSERT INTO users (username, password)
+VALUES ('Natalia Ibáñez', 'natalia123');
+INSERT INTO users (username, password)
+VALUES ('Martín Herrera', 'martin123');
+INSERT INTO users (username, password)
+VALUES ('Rosa Delgado', 'rosa123');
+
+-- ROL ASESOR --
+
+INSERT INTO user_roles (user_id, role_id)
+VALUES (7, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (8, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (9, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (10, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (11, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (12, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (13, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (14, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (15, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (16, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (17, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (18, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (19, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (20, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (21, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (22, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (23, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (24, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (25, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (26, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (27, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (28, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (29, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (30, 3);
+INSERT INTO user_roles (user_id, role_id)
+VALUES (31, 3);
+
+-- ASESORIAS --
+
 INSERT INTO asesoria (nombreasesoria, descripcionasesoria, costoasesoria, fechasesoria, urlimg, idcliente, idasesor)
 VALUES
--- PROGRAMACIÓN (idasesor 1–5)
+-- PROGRAMACIÓN (idasesor 1–5) --
 ('Introducción a Python', 'Aprende desde cero los fundamentos de la programación con Python.', 80.00, '2023-05-12', 'Imagenes/python.webp', NULL, 1),
 ('Desarrollo Web con Java Spring Boot', 'Crea APIs y aplicaciones web usando el framework Spring Boot.', 120.00, '2024-03-08', 'Imagenes/java.webp', NULL, 1),
 
@@ -68,7 +228,7 @@ VALUES
 ('Automatización con Python', 'Crea scripts para automatizar tareas y mejorar tu productividad.', 100.00, '2023-12-18', 'Imagenes/python.jpg', NULL, 5),
 ('Fundamentos de APIs REST', 'Comprende cómo funcionan las APIs y cómo consumirlas.', 110.00, '2024-06-10', 'Imagenes/api.jpg', NULL, 5),
 
--- MARKETING (idasesor 6–10)
+-- MARKETING (idasesor 6–10) --
 ('Marketing Digital para Emprendedores', 'Aprende estrategias clave para posicionar tu marca online.', 85.00, '2023-08-02', 'Imagenes/marketing1.png', NULL, 6),
 ('Publicidad en Redes Sociales', 'Diseña y gestiona campañas efectivas en Facebook e Instagram.', 95.00, '2025-03-10', 'Imagenes/marketing2.jpg', NULL, 6),
 
@@ -84,7 +244,7 @@ VALUES
 ('Neuromarketing Básico', 'Comprende el comportamiento del consumidor para mejorar ventas.', 105.00, '2024-05-06', 'Imagenes/marketing9.png', NULL, 10),
 ('Community Management', 'Aprende a gestionar comunidades digitales y redes sociales.', 95.00, '2023-09-16', 'Imagenes/marketing10.jpg', NULL, 10),
 
--- DISEÑO (idasesor 11–15)
+-- DISEÑO (idasesor 11–15) --
 ('Diseño Gráfico con Illustrator', 'Aprende a crear logos e ilustraciones profesionales.', 90.00, '2022-07-12', 'Imagenes/diseno1.webp', NULL, 11),
 ('Diseño de Interfaces (UI/UX)', 'Diseña experiencias digitales centradas en el usuario.', 120.00, '2024-02-25', 'Imagenes/diseno2.webp', NULL, 11),
 
@@ -100,7 +260,7 @@ VALUES
 ('Animación Digital 2D', 'Crea animaciones sencillas con After Effects.', 125.00, '2025-03-22', 'Imagenes/diseno9.png', NULL, 15),
 ('Diseño para Redes Sociales', 'Diseña piezas atractivas para Instagram y TikTok.', 90.00, '2022-10-19', 'Imagenes/diseno10.png', NULL, 15),
 
--- IDIOMAS (idasesor 16–20)
+-- IDIOMAS (idasesor 16–20) --
 ('Inglés Conversacional Intermedio', 'Mejora tu fluidez con prácticas guiadas en inglés.', 85.00, '2023-04-12', 'Imagenes/idiomas1.png', NULL, 16),
 ('Inglés para Negocios', 'Aprende expresiones y vocabulario para entornos empresariales.', 95.00, '2025-05-09', 'Imagenes/idiomas2.png', NULL, 16),
 
@@ -116,7 +276,7 @@ VALUES
 ('Alemán para Principiantes', 'Domina las frases esenciales y la gramática básica.', 90.00, '2023-02-17', 'Imagenes/idiomas9.png', NULL, 20),
 ('Alemán Conversacional', 'Mejora tu comprensión y expresión oral en alemán.', 100.00, '2025-04-29', 'Imagenes/idiomas10.jpg', NULL, 20),
 
--- NEGOCIOS (idasesor 21–25)
+-- NEGOCIOS (idasesor 21–25) --
 ('Finanzas Personales', 'Aprende a manejar tus ingresos y gastos de forma eficiente.', 90.00, '2023-08-10', 'Imagenes/negocios1.png', NULL, 21),
 ('Emprendimiento y Plan de Negocios', 'Crea un plan sólido para iniciar tu emprendimiento.', 120.00, '2024-05-21', 'Imagenes/negocios2.jpg', NULL, 21),
 

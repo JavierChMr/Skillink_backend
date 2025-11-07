@@ -35,16 +35,21 @@ public class ClienteService implements IClienteService {
         cliente.setDireccioncliente(dto.getDireccioncliente());
         cliente.setEstadocliente(dto.getEstadocliente());
         cliente.setPassword(dto.getPassword());
-        clienteRepository.save(cliente);
 
-        // Crear usuario en sistema de seguridad
+        Cliente savedCliente = clienteRepository.save(cliente);
+
         User user = new User();
         user.setUsername(dto.getNombrecliente());
-        user.setPassword(bcrypt.encode(dto.getPassword()));
+        user.setPassword(dto.getPassword());
+
         userService.save(user);
 
-        dto.setIdcliente(cliente.getIdcliente());
-        return dto;
+        Long userId = userService.findByUsername(dto.getNombrecliente()).getId();
+        Long roleId = userService.findRoleIdByName("USUARIO");
+
+        userService.insertUserRole(userId, roleId);
+
+        return modelMapper.map(savedCliente, ClienteDTO.class);
     }
 
     @Override

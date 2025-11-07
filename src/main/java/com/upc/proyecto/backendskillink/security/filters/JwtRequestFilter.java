@@ -38,8 +38,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Ignorar endpoints públicos
         if (path.startsWith("/api/authenticate") ||
-                path.startsWith("/api/skillink/usuario/registrar") ||
-                path.startsWith("/api/skillink/asesor/registrar") ||
+                path.startsWith("/api/skillink/usuario") ||
+                path.startsWith("/api/skillink/asesor") ||
                 path.startsWith("/api/skillink/administrador") ||
                 path.startsWith("/api/skillink/asesoria") || // <-- aquí
                 path.startsWith("/Imagenes")) {
