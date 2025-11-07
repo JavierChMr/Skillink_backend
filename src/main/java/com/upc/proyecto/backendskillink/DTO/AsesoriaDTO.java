@@ -23,5 +23,6 @@ public class AsesoriaDTO {
     private Double costoasesoria;
     private LocalDate fechasesoria;
     private Cliente cliente;
+    private String urlimg;
     private Asesor asesor;
 }

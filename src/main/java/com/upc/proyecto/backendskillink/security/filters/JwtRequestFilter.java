@@ -1,4 +1,5 @@
 package com.upc.proyecto.backendskillink.security.filters;
+
 import com.upc.proyecto.backendskillink.security.services.CustomUserDetailsService;
 import com.upc.proyecto.backendskillink.security.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -13,12 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-/*
- (1)
-    JwtRequestFilter es un filtro de seguridad personalizado que se encarga de procesar
-    las solicitudes HTTP entrantes para verificar la validez de un token JWT (JSON Web Token).
-    Este filtro se ejecuta una vez por cada solicitud y se utiliza para autenticar al usuario
-    y establecer el contexto de seguridad en la aplicación.
+
+/**
+ * JwtRequestFilter es un filtro de seguridad personalizado que procesa
+ * las solicitudes HTTP entrantes para verificar la validez de un token JWT.
  */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -35,33 +34,39 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        final String authorizationHeader = request.getHeader("Authorization");
+        String path = request.getRequestURI();
 
+        // Ignorar endpoints públicos
+        if (path.startsWith("/api/authenticate") ||
+                path.startsWith("/api/skillink/usuario/registrar") ||
+                path.startsWith("/api/skillink/asesor/registrar") ||
+                path.startsWith("/api/skillink/administrador") ||
+                path.startsWith("/api/skillink/asesoria") || // <-- aquí
+                path.startsWith("/Imagenes")) {
+
+            chain.doFilter(request, response);
+            return; // No se valida JWT
+        }
+
+        final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
-            System.out.println("USERNAME:" + username);
         }
 
-        // Este es el punto clave donde se verifica si el token JWT es válido y se establece
-        // la autenticación del usuario en el contexto de seguridad de Spring Security.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
             if (jwtUtil.validateToken(jwt, userDetails)) {
-
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                //siempre por ser stateless, se debe establecer el contexto de seguridad
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        chain.doFilter(request, response);//ya va al controller o al siguiente filtro en la cadena
+
+        chain.doFilter(request, response);
     }
 }
