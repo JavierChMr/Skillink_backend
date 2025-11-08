@@ -3,6 +3,7 @@ package com.upc.proyecto.backendskillink.Controller;
 import com.upc.proyecto.backendskillink.DTO.AsesoriaDTO;
 import com.upc.proyecto.backendskillink.Service.AsesoriaService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/skillink/asesoria")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AsesoriaController {
     @Autowired
     private AsesoriaService asesoriaService;

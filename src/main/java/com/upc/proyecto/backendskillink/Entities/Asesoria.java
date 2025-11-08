@@ -24,6 +24,8 @@ public class Asesoria {
     private Double costoasesoria;
     private LocalDate fechasesoria;
     private String urlimg;
+    private String cantidadresenhas;
+    private Integer cantidadestrellas;
     @ManyToOne
     @JoinColumn(name = "idcliente")
     private Cliente cliente;
