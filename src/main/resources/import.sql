@@ -292,3 +292,48 @@ VALUES
 ('Contabilidad Básica', 'Conoce los fundamentos contables de una empresa.', 95.00, '2022-09-22', 'Imagenes/negocios9.webp', NULL, 25),
 ('Planeamiento Estratégico', 'Diseña estrategias empresariales a largo plazo.', 120.00, '2024-07-13', 'Imagenes/negocios10.jpg', NULL, 25);
 
+
+-- CARTILLA ASESOR
+-- ===============================
+INSERT INTO cartilla_asesor (
+    nombrecartillaasesor,
+    descripcioncartillaasesor,
+    especialcartillaasesor,
+    estrellascartillaasesor,
+    urlcartillaasesor,
+    anhoexperienciacartillaasesor,
+    preciocartillaasesor
+) VALUES
+-- -- PROGRAMACIÓN
+('Luis Ramírez', 'Especialista en desarrollo web y sistemas escalables con Java y Angular.', 'Programación', 5, 'Imagenes/luis_ramirez.jpg', '5', 350.00),
+('María Quispe', 'Desarrolladora full stack con experiencia en microservicios y Spring Boot.', 'Programación', 4, 'Imagenes/maria_quispe.webp', '3', 250.00),
+('José Castillo', 'Experto en backend con Node.js, Express y bases de datos SQL.', 'Programación', 4, 'Imagenes/jose_castillo.webp', '4', 280.00),
+('Andrea Paredes', 'Ingeniera de software especializada en interfaces modernas con Angular.', 'Programación', 5, 'Imagenes/andrea_paredes.webp', '6', 400.00),
+('Carlos Díaz', 'Consultor en desarrollo de APIs REST y arquitecturas limpias.', 'Programación', 3, 'Imagenes/carlos_diaz.png', '2', 180.00),
+
+-- -- MARKETING
+('Daniela Torres', 'Estratega digital con amplia experiencia en SEO y marketing de contenido.', 'Marketing', 5, 'Imagenes/daniela_torres.jpg', '7', 420.00),
+('Fernando López', 'Experto en campañas publicitarias y análisis de métricas digitales.', 'Marketing', 4, 'Imagenes/fernando_lopez.webp', '5', 300.00),
+('Laura Vega', 'Consultora en marketing estratégico y posicionamiento de marca.', 'Marketing', 5, 'Imagenes/laura_vega.webp', '8', 450.00),
+('Ricardo Chávez', 'Especialista en marketing en redes sociales y generación de leads.', 'Marketing', 3, 'Imagenes/ricardo_chavez.jpg', '2', 200.00),
+('Sofía Medina', 'Analista de comportamiento del consumidor y marketing emocional.', 'Marketing', 4, 'Imagenes/sofia_medina.webp', '4', 270.00),
+--
+-- -- -- DISEÑO
+('Valeria Campos', 'Diseñadora UX/UI con enfoque en experiencia de usuario moderna.', 'Diseño', 5, 'Imagenes/valeria_campos.webp', '6', 390.00),
+('Diego Alarcón', 'Diseñador gráfico con experiencia en branding y diseño corporativo.', 'Diseño', 4, 'Imagenes/diego_alarcon.webp', '4', 310.00),
+('Paula Ramos', 'Especialista en ilustración digital y diseño publicitario.', 'Diseño', 3, 'Imagenes/paula_ramos.webp', '3', 220.00),
+('Javier Méndez', 'Experto en diseño 3D y animación para campañas multimedia.', 'Diseño', 4, 'Imagenes/javier_mendez.webp', '5', 350.00),
+('Camila Soto', 'Diseñadora visual enfocada en identidad de marca.', 'Diseño', 5, 'Imagenes/camila_soto.webp', '7', 410.00),
+-- -- IDIOMAS
+('Andrés Navarro', 'Profesor certificado en inglés avanzado y traducción profesional.', 'Idiomas', 5, 'Imagenes/andres_navarro.webp', '9', 480.00),
+('Patricia León', 'Docente de francés con enfoque en conversación y gramática.', 'Idiomas', 4, 'Imagenes/patricia_leon.webp', '5', 300.00),
+('Santiago Ruiz', 'Instructor de alemán especializado en niveles básicos e intermedios.', 'Idiomas', 3, 'Imagenes/santiago_ruiz.webp', '3', 210.00),
+('Carolina Pérez', 'Profesora de inglés con experiencia en preparación TOEFL y IELTS.', 'Idiomas', 5, 'Imagenes/carolina_perez.jpg', '8', 450.00),
+('Héctor Gálvez', 'Docente de portugués con experiencia en cursos empresariales.', 'Idiomas', 4, 'Imagenes/hector_galvez.webp', '6', 330.00),
+--
+-- -- NEGOCIOS
+('Gabriela Rojas', 'Consultora en desarrollo organizacional y liderazgo empresarial.', 'Negocios', 5, 'Imagenes/gabriela_rojas.avif', '10', 500.00),
+('Eduardo Flores', 'Experto en gestión financiera y análisis económico.', 'Negocios', 4, 'Imagenes/eduardo_flores.avif', '6', 350.00),
+('Natalia Ibáñez', 'Asesora en emprendimiento y desarrollo de startups.', 'Negocios', 4, 'Imagenes/natalia_ibanez.webp', '5', 320.00),
+('Martín Herrera', 'Especialista en administración estratégica y crecimiento empresarial.', 'Negocios', 5, 'Imagenes/martin_herrera.webp', '9', 480.00),
+('Rosa Delgado', 'Consultora en comercio internacional y negociación efectiva.', 'Negocios', 3, 'Imagenes/rosa_delgado.jpeg', '3', 250.00);
