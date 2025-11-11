@@ -20,7 +20,7 @@ public class ResenhaAsesor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idresenha;
 
-    @Column(unique = true)
+
     private String descripcionresenha;
     @Min(value = 0, message = "El valor minimo de resenha es 0")
     @Max(value = 5, message = "El valor maximo de resenha es 5")

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +34,9 @@ public class Asesoria {
     @ManyToOne
     @JoinColumn(name = "idasesor")
     private Asesor asesor;
+
+    @OneToMany(mappedBy = "asesoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ResenhaAsesoria> resenhas;
 
 //    @ManyToOne
 //    @JoinColumn(name = "idadministrador")

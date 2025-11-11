@@ -63,7 +63,7 @@ public class AuthController {
                 String token = jwtUtil.generateToken(cliente.getNombrecliente());
                 response = new AuthResponseDTO();
                 response.setJwt(token);
-                response.setRoles(Set.of("ROLE_USUARIO")); // ← Rol manual
+                response.setRoles(Set.of("USUARIO")); // ← Rol manual
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
             }
 
@@ -73,7 +73,7 @@ public class AuthController {
                 String token = jwtUtil.generateToken(asesor.getNombreasesor());
                 response = new AuthResponseDTO();
                 response.setJwt(token);
-                response.setRoles(Set.of("ROLE_ASESOR")); // ← Rol manual
+                response.setRoles(Set.of("ASESOR")); // ← Rol manual
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
             }
 
@@ -83,7 +83,7 @@ public class AuthController {
                 String token = jwtUtil.generateToken(administrador.getNombreadmin());
                 response = new AuthResponseDTO();
                 response.setJwt(token);
-                response.setRoles(Set.of("ROLE_ADMIN")); // ← Rol manual
+                response.setRoles(Set.of("ADMIN")); // ← Rol manual
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
             }
 
