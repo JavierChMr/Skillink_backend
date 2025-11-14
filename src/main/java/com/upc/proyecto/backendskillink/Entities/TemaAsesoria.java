@@ -1,5 +1,7 @@
 package com.upc.proyecto.backendskillink.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,9 +16,9 @@ public class TemaAsesoria {
     private Long idtema;
     private String nombreTema;
     private String descripcionTema;
-
     @ManyToOne
     @JoinColumn(name = "idverasesoria")
+    @JsonBackReference
     private VerAsesoria verAsesoria;
 
 }

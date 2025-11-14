@@ -1,5 +1,6 @@
 package com.upc.proyecto.backendskillink.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,12 +26,14 @@ public class ResenhaAsesoria {
     @Max(value = 5, message = "El valor maximo de resenha es 5")
     private Integer puntajeresenha;
     private LocalDate fecharesenha;
-
-    @ManyToOne
-    @JoinColumn(name = "idasesoria")
-    private Asesoria asesoria;
-
     @ManyToOne
     @JoinColumn(name = "idcliente")
     private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_verasesoria")
+    @JsonBackReference("resenhaRef")
+    private VerAsesoria verAsesoria;
+
+
 }

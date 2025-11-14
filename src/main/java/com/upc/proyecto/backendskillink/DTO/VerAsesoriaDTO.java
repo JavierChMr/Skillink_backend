@@ -1,9 +1,6 @@
 package com.upc.proyecto.backendskillink.DTO;
 
-import com.upc.proyecto.backendskillink.Entities.Asesor;
-import com.upc.proyecto.backendskillink.Entities.Pago;
-import com.upc.proyecto.backendskillink.Entities.ResenhaAsesoria;
-import com.upc.proyecto.backendskillink.Entities.TemaAsesoria;
+import com.upc.proyecto.backendskillink.Entities.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,15 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 public class VerAsesoriaDTO {
 
-    public Long idverasesoria;
-    public String descricionverasesoria;
-    private LocalDate fechaAsesoria;
-    public String temasasesoria;
-    private Double precioAsesoria;
-    private Asesor asesor;
-    private ResenhaAsesoria resenhaAsesoria;
+    private Long idverasesoria;
+    private String descripcionVerAsesoria;  // corregido
     private Pago pago;
-    private List<TemaAsesoria> temasAsesoria;
+    private Asesoria asesoria;
+    private List<TemaAsesoria> temasAsesoria; // la lista real de temas
     private List<ResenhaAsesoria> resenhas;
-
 }

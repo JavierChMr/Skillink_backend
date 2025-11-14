@@ -30,16 +30,7 @@ public class Asesoria {
     @ManyToOne
     @JoinColumn(name = "idcliente")
     private Cliente cliente;
-
     @ManyToOne
     @JoinColumn(name = "idasesor")
     private Asesor asesor;
-
-    @OneToMany(mappedBy = "asesoria", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ResenhaAsesoria> resenhas;
-
-//    @ManyToOne
-//    @JoinColumn(name = "idadministrador")
-//    private Administrador administrador;
-
 }

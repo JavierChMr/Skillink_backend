@@ -55,6 +55,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/skillink/asesoria/**").permitAll()
                         .requestMatchers("/api/asesorias/**").permitAll()
                         .requestMatchers("/api/skillink/cartillaasesor/**").permitAll()
+                        .requestMatchers("/api/skillink/verasesoria/**").permitAll()
+                        .requestMatchers("/api/skillink/temasesoria/**").permitAll()
                         .requestMatchers("/Imagenes/**").permitAll()
                         .anyRequest().authenticated()
                 )
