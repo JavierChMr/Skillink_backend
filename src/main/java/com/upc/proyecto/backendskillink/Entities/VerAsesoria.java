@@ -28,6 +28,8 @@ public class VerAsesoria {
     @JoinColumn(name= "asesoria")
     private Asesoria asesoria;
 
+
+
     @OneToMany(mappedBy = "verAsesoria", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<TemaAsesoria> temasAsesoria;
