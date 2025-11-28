@@ -22,7 +22,7 @@ public class VerAsesoria {
     public Long idverasesoria;
     public String descricionverasesoria;
     @ManyToOne
-    @JoinColumn(name = "id_pago") //esto deber ser una tabla intermedia en el dto ps
+    @JoinColumn(name = "id_pago")
     private Pago pago;
     @ManyToOne
     @JoinColumn(name= "asesoria")

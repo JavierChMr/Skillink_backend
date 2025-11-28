@@ -25,5 +25,4 @@ public class CartillaAsesor {
     private String urlcartillaasesor;
     private String anhoexperienciacartillaasesor;
     private Double preciocartillaasesor;
-
 }
