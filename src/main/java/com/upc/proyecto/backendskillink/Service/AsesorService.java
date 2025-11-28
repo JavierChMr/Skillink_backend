@@ -8,6 +8,7 @@ import com.upc.proyecto.backendskillink.security.entities.User;
 import com.upc.proyecto.backendskillink.security.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,10 @@ public class AsesorService implements IAsesorService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private UserService userService; // Para registrar usuario
+    private UserService userService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -36,30 +40,36 @@ public class AsesorService implements IAsesorService {
 
     @Override
     public AsesorDTO registrar(AsesorDTO dto) {
-        // Crear asesor
-        Asesor asesor = new Asesor();
-        asesor.setNombreasesor(dto.getNombreasesor());
-        asesor.setCorreoasesor(dto.getCorreoasesor());
-        asesor.setTelefonoasesor(dto.getTelefonoasesor());
-        asesor.setDireccionasesor(dto.getDireccionasesor());
-        asesor.setEstadoasesor(dto.getEstadoasesor());
-        asesor.setEspecialidadasesor(dto.getEspecialidadasesor());
-        asesor.setPassword(dto.getPassword());
 
-        Asesor savedAsesor = asesorRepository.save(asesor);
+      // Encriptar una sola vez
+      String hashedPassword = passwordEncoder.encode(dto.getPassword());
 
-        User user = new User();
-        user.setUsername(dto.getNombreasesor());
-        user.setPassword(dto.getPassword());
+      // 1. Crear asesor con contraseña ya encriptada
+      Asesor asesor = new Asesor();
+      asesor.setNombreasesor(dto.getNombreasesor());
+      asesor.setCorreoasesor(dto.getCorreoasesor());
+      asesor.setTelefonoasesor(dto.getTelefonoasesor());
+      asesor.setDireccionasesor(dto.getDireccionasesor());
+      asesor.setEstadoasesor(dto.getEstadoasesor());
+      asesor.setEspecialidadasesor(dto.getEspecialidadasesor());
+      asesor.setPassword(hashedPassword); // ✔ contraseña encriptada
 
-        userService.save(user);
+      Asesor savedAsesor = asesorRepository.save(asesor);
 
-        Long userId = userService.findByUsername(dto.getNombreasesor()).getId();
-        Long roleId = userService.findRoleIdByName("ASESOR");
+      // 2. Crear User para autenticación (misma clave hasheada)
+      User user = new User();
+      user.setUsername(dto.getNombreasesor()); // ⚠ si prefieres login por correo, cambias aquí
+      user.setPassword(hashedPassword);        // ✔ YA encriptada
 
-        userService.insertUserRole(userId, roleId);
+      userService.save(user);
 
-        return modelMapper.map(savedAsesor, AsesorDTO.class);
+      // 3. Insertar rol ASESOR
+      Long userId = userService.findByUsername(dto.getNombreasesor()).getId();
+      Long roleId = userService.findRoleIdByName("ASESOR");
+
+      userService.insertUserRole(userId, roleId);
+
+      return modelMapper.map(savedAsesor, AsesorDTO.class);
     }
 
 

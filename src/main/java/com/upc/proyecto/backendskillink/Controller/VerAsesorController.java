@@ -22,7 +22,7 @@ public class VerAsesorController {
     return verasesorservice.listarVerAsesor();
   }
 
-  @GetMapping("/listarverasesoria/{idverasesoria}")
+  @GetMapping("/listarverasesor/{idverasesor}")
   public VerAsesorDTO obtenerVerAsesorPorId(@PathVariable Long idverasesor) {
     return verasesorservice.obtenerVerAsesorPorId(idverasesor);
   }

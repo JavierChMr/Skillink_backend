@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", exposedHeaders = "Authorization")
 @RestController
@@ -47,55 +48,39 @@ public class AuthController {
         this.userDetailsService = userDetailsService;
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthRequestDTO authRequest) {
-        try {
-            // Autenticación básica con Spring Security (texto plano)
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-            );
+  @PostMapping("/authenticate")
+  public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthRequestDTO authRequest) {
+    try {
+      // 1. Autenticar correctamente usando Spring Security (usa BCrypt internamente)
+      Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+      );
 
-            AuthResponseDTO response;
+      // 2. Cargar el usuario completo
+      var userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
-            // Buscar como Cliente
-            Cliente cliente = clienteService.findByNombre(authRequest.getUsername());
-            if (cliente != null && cliente.getPassword().equals(authRequest.getPassword())) {
-                String token = jwtUtil.generateToken(cliente.getNombrecliente());
-                response = new AuthResponseDTO();
-                response.setJwt(token);
-                response.setRoles(Set.of("USUARIO")); // ← Rol manual
-                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
-            }
+      // 3. Generar JWT
+      String token = jwtUtil.generateToken(userDetails.getUsername());
 
-            // Buscar como Asesor
-            Asesor asesor = asesorService.findByNombre(authRequest.getUsername());
-            if (asesor != null && asesor.getPassword().equals(authRequest.getPassword())) {
-                String token = jwtUtil.generateToken(asesor.getNombreasesor());
-                response = new AuthResponseDTO();
-                response.setJwt(token);
-                response.setRoles(Set.of("ASESOR")); // ← Rol manual
-                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
-            }
+      // 4. Extraer roles automáticamente desde CustomUserDetailsService
+      Set<String> roles = userDetails.getAuthorities().stream()
+        .map(a -> a.getAuthority())
+        .collect(Collectors.toSet());
 
-            // Buscar como Admin
-            Administrador administrador = administradorService.findByNombre(authRequest.getUsername());
-            if (administrador != null && administrador.getPassword().equals(authRequest.getPassword())) {
-                String token = jwtUtil.generateToken(administrador.getNombreadmin());
-                response = new AuthResponseDTO();
-                response.setJwt(token);
-                response.setRoles(Set.of("ADMIN")); // ← Rol manual
-                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(response);
-            }
+      // 5. Armar respuesta
+      AuthResponseDTO response = new AuthResponseDTO();
+      response.setJwt(token);
+      response.setRoles(roles);
 
+      return ResponseEntity.ok()
+        .header(HttpHeaders.AUTHORIZATION, token)
+        .body(response);
 
-
-            // Usuario no encontrado o contraseña incorrecta
-            return ResponseEntity.status(401).body("Credenciales inválidas");
-
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Credenciales inválidas");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error interno del servidor");
-        }
+    } catch (BadCredentialsException e) {
+      return ResponseEntity.status(401).body("Credenciales inválidas");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("Error interno del servidor");
     }
+  }
+
 }

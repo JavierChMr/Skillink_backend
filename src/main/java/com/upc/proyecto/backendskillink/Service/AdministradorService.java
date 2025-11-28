@@ -17,6 +17,7 @@ import com.upc.proyecto.backendskillink.security.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,37 +28,42 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdministradorService implements IAdministradorService {
     private final AdministradorRepository administradorRepository;
-    private final AsesoriaRepository asesoriaRepository;
     private final AsesorRepository asesorRepository;
     private final ClienteRepository clienteRepository;
     private final ModelMapper modelMapper;
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public AdministradorDTO registrar(AdministradorDTO dto) {
-        Administrador administrador = new Administrador();
-        administrador.setNombreadmin(dto.getNombreadmin());
-        administrador.setCorreoadmin(dto.getCorreoadmin());
-        administrador.setTelefonoadmin(dto.getTelefonoadmin());
-        administrador.setDireccionadmin(dto.getDireccionadmin());
-        administrador.setPassword(dto.getPassword());
+      // Encriptar una sola vez
+      String hashedPassword = passwordEncoder.encode(dto.getPassword());
 
-        Administrador savedAdmin = administradorRepository.save(administrador);
+      Administrador administrador = new Administrador();
+      administrador.setNombreadmin(dto.getNombreadmin());
+      administrador.setCorreoadmin(dto.getCorreoadmin());
+      administrador.setTelefonoadmin(dto.getTelefonoadmin());
+      administrador.setDireccionadmin(dto.getDireccionadmin());
+      administrador.setPassword(hashedPassword);  // ✔ guardar ENCRIPTADO
 
-        User user = new User();
-        user.setUsername(dto.getNombreadmin());
-        user.setPassword(dto.getPassword());
+      Administrador savedAdmin = administradorRepository.save(administrador);
 
-        userService.save(user); // no devuelve nada
+      User user = new User();
+      user.setUsername(dto.getNombreadmin());
+      user.setPassword(hashedPassword);  // ✔ misma contraseña encriptada
 
-        Long userId = userService.findByUsername(dto.getNombreadmin()).getId();
-        Long roleId = userService.findRoleIdByName("ADMIN");
+      userService.save(user);
 
-        userService.insertUserRole(userId, roleId);
+      Long userId = userService.findByUsername(dto.getNombreadmin()).getId();
+      Long roleId = userService.findRoleIdByName("ADMIN");
 
-        return modelMapper.map(savedAdmin, AdministradorDTO.class);
+      userService.insertUserRole(userId, roleId);
+
+      return modelMapper.map(savedAdmin, AdministradorDTO.class);
     }
 
     @Override

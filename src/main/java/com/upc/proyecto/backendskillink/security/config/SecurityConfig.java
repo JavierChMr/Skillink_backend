@@ -5,12 +5,14 @@ import com.upc.proyecto.backendskillink.security.services.CustomUserDetailsServi
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,54 +34,64 @@ public class SecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+  // AuthenticationManager + BCrypt + UserDetailsService
+  @Bean
+  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    AuthenticationManagerBuilder authManagerBuilder =
+      http.getSharedObject(AuthenticationManagerBuilder.class);
 
-    @Bean
+    authManagerBuilder
+      .userDetailsService(userDetailsService)
+      .passwordEncoder(passwordEncoder());  // *** IMPORTANTE ***
+
+    return authManagerBuilder.build();
+  }
+
+
+  @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // texto plano
+        return new BCryptPasswordEncoder();// texto plano
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(cors -> {}) // habilita CORS usando la lambda
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/authenticate").permitAll()
-                        .requestMatchers("/api/skillink/usuario/**").permitAll()
-                        .requestMatchers("/api/skillink/asesor/**").permitAll()
-                        .requestMatchers("/api/skillink/administrador/**").permitAll()
-                        .requestMatchers("/api/skillink/asesoria/**").permitAll()
-                        .requestMatchers("/api/asesorias/**").permitAll()
-                        .requestMatchers("/api/skillink/cartillaasesor/**").permitAll()
-                        .requestMatchers("/api/skillink/verasesoria/**").permitAll()
-                        .requestMatchers("/api/skillink/temasesoria/**").permitAll()
-                        .requestMatchers("/Imagenes/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        // JWT filter
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    http
+      .csrf(csrf -> csrf.disable())
+      .cors(cors -> {})
+      .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/api/authenticate").permitAll()
+        .requestMatchers("/api/skillink/usuario/**").permitAll()
+        .requestMatchers("/api/skillink/asesor/**").permitAll()
+        .requestMatchers("/api/skillink/administrador/**").permitAll()
+        .requestMatchers("/api/skillink/asesoria/**").permitAll()
+        .requestMatchers("/api/asesorias/**").permitAll()
+        .requestMatchers("/api/skillink/cartillaasesor/**").permitAll()
+        .requestMatchers("/api/skillink/verasesoria/**").permitAll()
+        .requestMatchers("/api/skillink/temasesoria/**").permitAll()
+        .requestMatchers("/Imagenes/**").permitAll()
+        .anyRequest().authenticated()
+      )
+      .sessionManagement(session ->
+        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      )
+      .userDetailsService(userDetailsService); // <- IMPORTANTE
 
-        return http.build();
-    }
+    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-    // Bean CORS para permitir requests desde Angular
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:4200"); // origen Angular
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
+    return http.build();
+  }
+
+  // Permitir Angular
+  @Bean
+  public CorsFilter corsFilter() {
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowCredentials(true);
+    config.addAllowedOrigin("http://localhost:4200");
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+    source.registerCorsConfiguration("/**", config);
+    return new CorsFilter(source);
+  }
 }

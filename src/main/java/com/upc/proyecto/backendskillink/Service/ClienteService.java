@@ -24,32 +24,39 @@ public class ClienteService implements IClienteService {
     @Autowired
     private UserService userService;
     @Autowired
-    private PasswordEncoder bcrypt;
+    private PasswordEncoder passwordEncoder;
 
+    @Override
     public ClienteDTO registrar(ClienteDTO dto) {
-        // Crear cliente
-        Cliente cliente = new Cliente();
-        cliente.setNombrecliente(dto.getNombrecliente());
-        cliente.setCorreocliente(dto.getCorreocliente());
-        cliente.setTelefonocliente(dto.getTelefonocliente());
-        cliente.setDireccioncliente(dto.getDireccioncliente());
-        cliente.setEstadocliente(dto.getEstadocliente());
-        cliente.setPassword(dto.getPassword());
 
-        Cliente savedCliente = clienteRepository.save(cliente);
+      // Encriptar una sola vez
+      String hashedPassword = passwordEncoder.encode(dto.getPassword());
 
-        User user = new User();
-        user.setUsername(dto.getNombrecliente());
-        user.setPassword(dto.getPassword());
+      // 1. Crear cliente con contraseña encriptada
+      Cliente cliente = new Cliente();
+      cliente.setNombrecliente(dto.getNombrecliente());
+      cliente.setCorreocliente(dto.getCorreocliente());
+      cliente.setTelefonocliente(dto.getTelefonocliente());
+      cliente.setDireccioncliente(dto.getDireccioncliente());
+      cliente.setEstadocliente(dto.getEstadocliente());
+      cliente.setPassword(hashedPassword); // ✔ se guarda encriptado
 
-        userService.save(user);
+      Cliente savedCliente = clienteRepository.save(cliente);
 
-        Long userId = userService.findByUsername(dto.getNombrecliente()).getId();
-        Long roleId = userService.findRoleIdByName("USUARIO");
+      // 2. Crear User para login (misma contraseña encriptada)
+      User user = new User();
+      user.setUsername(dto.getNombrecliente()); // ⚠ si usas correo para login, cambiar aquí
+      user.setPassword(hashedPassword);        // ✔ misma clave encriptada
 
-        userService.insertUserRole(userId, roleId);
+      userService.save(user);
 
-        return modelMapper.map(savedCliente, ClienteDTO.class);
+      // 3. Vincular usuario con rol USUARIO
+      Long userId = userService.findByUsername(dto.getNombrecliente()).getId();
+      Long roleId = userService.findRoleIdByName("USUARIO");
+
+      userService.insertUserRole(userId, roleId);
+
+      return modelMapper.map(savedCliente, ClienteDTO.class);
     }
 
     @Override
