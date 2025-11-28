@@ -72,6 +72,42 @@ public class AdministradorService implements IAdministradorService {
     public Administrador findByNombre(String nombre) {
         return administradorRepository.findByNombreadmin(nombre).orElse(null);
     }
+
+
+
+
+    // ============================
+//   ACTUALIZAR ESTADO ASESOR
+// ============================
+    public AsesorDTO actualizarEstadoAsesor(Long idasesor, Boolean nuevoEstado) {
+
+        Asesor asesor = asesorRepository.findById(idasesor)
+                .orElseThrow(() -> new RuntimeException("Asesor no encontrado"));
+
+        asesor.setEstadoasesor(nuevoEstado);
+
+        asesorRepository.save(asesor);
+
+        return modelMapper.map(asesor, AsesorDTO.class);
+    }
+
+    // ============================
+//   ACTUALIZAR ESTADO CLIENTE
+// ============================
+    public ClienteDTO actualizarEstadoCliente(Long idcliente, Boolean nuevoEstado) {
+
+        var cliente = clienteRepository.findById(idcliente)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        cliente.setEstadocliente(nuevoEstado);
+
+        clienteRepository.save(cliente);
+
+        return modelMapper.map(cliente, ClienteDTO.class);
+    }
+
+
+
 //    @Override
 //    public void eliminarasesoria(Long idasesoria) {
 //        asesoriaRepository.deleteById(idasesoria);

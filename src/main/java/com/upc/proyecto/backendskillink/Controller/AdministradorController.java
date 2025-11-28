@@ -95,6 +95,18 @@ public class AdministradorController {
         asesorService.eliminarasesor(id);
     }
 
+
+    @PutMapping("/asesores/{id}/estado")
+    public ResponseEntity<AsesorDTO> actualizarEstado(
+            @PathVariable Long id,
+            @RequestBody Boolean nuevoEstado) {
+
+        AsesorDTO actualizado = administradorService.actualizarEstadoAsesor(id, nuevoEstado);
+        return ResponseEntity.ok(actualizado);
+    }
+
+
+
     // ============================
     //           CLIENTES
     // ============================
@@ -118,5 +130,17 @@ public class AdministradorController {
     public void eliminarCliente(@PathVariable Long id) {
         clienteService.eliminarcliente(id);
     }
+
+
+
+    @PutMapping("/clientes/{id}/estado")
+    public ResponseEntity<ClienteDTO> actualizarEstadoCliente(
+            @PathVariable Long id,
+            @RequestBody Boolean nuevoEstado) {
+
+        ClienteDTO actualizado = administradorService.actualizarEstadoCliente(id, nuevoEstado);
+        return ResponseEntity.ok(actualizado);
+    }
+
 
 }
