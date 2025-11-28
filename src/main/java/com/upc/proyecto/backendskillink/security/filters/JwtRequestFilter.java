@@ -41,7 +41,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 path.startsWith("/api/skillink/usuario") ||
                 path.startsWith("/api/skillink/asesor") ||
                 path.startsWith("/api/skillink/administrador") ||
-                path.startsWith("/api/skillink/asesoria") || // <-- aquí
+                path.startsWith("/api/skillink/asesoria") ||// <-- aquí
+                path.startsWith("/api/skillink/cartillaasesor") ||
                 path.startsWith("/Imagenes")) {
 
             chain.doFilter(request, response);

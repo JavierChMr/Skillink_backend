@@ -22,9 +22,9 @@ public class AsesoriaDTO {
     private String descripcionasesoria;
     private Double costoasesoria;
     private LocalDate fechasesoria;
-    private Cliente cliente;
     private String urlimg;
     private String cantidadresenhas;
     private Integer cantidadestrellas;
     private Asesor asesor;
+    private Cliente cliente;
 }
