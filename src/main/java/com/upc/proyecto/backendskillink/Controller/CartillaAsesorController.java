@@ -4,6 +4,7 @@ import com.upc.proyecto.backendskillink.DTO.CartillaAsesorDTO;
 import com.upc.proyecto.backendskillink.Service.CartillaAsesorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,15 @@ public class CartillaAsesorController {
     private CartillaAsesorService cartillaAsesorService;
 
     @PostMapping("/registrarcartilla")
+    @PreAuthorize("hasAuthority('ASESOR')")
+
     public CartillaAsesorDTO crearCartilla(@RequestBody CartillaAsesorDTO dto) {
         return cartillaAsesorService.registrar_cartilla(dto);
     }
 
     @PutMapping("/actualizarcartilla")
+    @PreAuthorize("hasAuthority('ASESOR')")
+
     public CartillaAsesorDTO actualizarCartilla(@RequestBody CartillaAsesorDTO dto) {
         return cartillaAsesorService.actualizar_cartilla(dto);
     }

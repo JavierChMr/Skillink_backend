@@ -36,20 +36,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // Ignorar endpoints públicos
-        if (path.startsWith("/api/authenticate") ||
-                path.startsWith("/api/skillink/usuario") ||
-                path.startsWith("/api/skillink/asesor") ||
-                path.startsWith("/api/skillink/administrador") ||
-                path.startsWith("/api/skillink/asesoria") ||// <-- aquí
-                path.startsWith("/api/skillink/cartillaasesor") ||
-                path.startsWith("/Imagenes")) {
+        // ENDPOINTS QUE NO REQUIREN JWT
+        if (path.equals("/api/authenticate")
+                || path.startsWith("/Imagenes")
+                || path.equals("/api/skillink/cartillaasesor/listarcartilla")) {
 
             chain.doFilter(request, response);
-            return; // No se valida JWT
+            return;
         }
 
+        // --- VALIDACIÓN JWT NORMAL ---
         final String authorizationHeader = request.getHeader("Authorization");
+
         String username = null;
         String jwt = null;
 
@@ -60,14 +58,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
         chain.doFilter(request, response);
     }
+
 }

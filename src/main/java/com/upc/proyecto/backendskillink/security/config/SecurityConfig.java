@@ -53,34 +53,46 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();// texto plano
     }
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http
-      .csrf(csrf -> csrf.disable())
-      .cors(cors -> {})
-      .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/authenticate").permitAll()
-        .requestMatchers("/api/skillink/usuario/**").permitAll()
-        .requestMatchers("/api/skillink/asesor/**").permitAll()
-        .requestMatchers("/api/skillink/administrador/**").permitAll()
-        .requestMatchers("/api/skillink/asesoria/**").permitAll()
-        .requestMatchers("/api/asesorias/**").permitAll()
-        .requestMatchers("/api/skillink/cartillaasesor/**").permitAll()
-        .requestMatchers("/api/skillink/verasesoria/**").permitAll()
-        .requestMatchers("/api/skillink/temasesoria/**").permitAll()
-        .requestMatchers("/Imagenes/**").permitAll()
-        .anyRequest().authenticated()
-      )
-      .sessionManagement(session ->
-        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      )
-      .userDetailsService(userDetailsService); // <- IMPORTANTE
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
+                .authorizeHttpRequests(auth -> auth
+                        // LOGIN
+                        .requestMatchers("/api/authenticate").permitAll()
 
-    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                        // Registro de usuario público
+                        .requestMatchers("/api/skillink/usuario/registrar").permitAll()
+                        .requestMatchers("/api/skillink/asesor/registrar").permitAll()
 
-    return http.build();
-  }
+                        // Este SÍ debe ser público para mostrar carta de asesores
+                        .requestMatchers("/api/skillink/cartillaasesor/listarcartilla").permitAll()
+
+                        // ⚠ Quita esto: ya no debe ser público, lo controlarás por @PreAuthorize
+                        // .requestMatchers("/api/skillink/administrador/").permitAll()
+
+                        // Si estos realmente deben ser públicos, déjalos:
+                        .requestMatchers("/api/asesorias/").permitAll()
+                        .requestMatchers("/api/skillink/verasesoria/").permitAll()
+                        .requestMatchers("/api/skillink/temasesoria/").permitAll()
+
+                        // Para mostrar imágenes
+                        .requestMatchers("/Imagenes/**").permitAll()
+
+                        // Todo lo demás necesita JWT
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .userDetailsService(userDetailsService);
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 
   // Permitir Angular
   @Bean

@@ -22,6 +22,8 @@ public class AsesoriaController {
 
 
     @PostMapping("/registrar")
+    @PreAuthorize("hasAuthority('ASESOR')")
+
     public ResponseEntity<AsesoriaDTO> registrar(@Valid @RequestBody AsesoriaDTO asesoriaDTO) {
         AsesoriaDTO nuevaAsesoria = asesoriaService.registrar(asesoriaDTO);
         return ResponseEntity.ok(nuevaAsesoria);
@@ -29,6 +31,8 @@ public class AsesoriaController {
 
 
     @PutMapping("/actualizar")
+    @PreAuthorize("hasAuthority('ASESOR')")
+
     public ResponseEntity<AsesoriaDTO> actualizar(@Valid @RequestBody AsesoriaDTO asesoriaDTO) {
         AsesoriaDTO asesoriaActualizada = asesoriaService.actualizar(asesoriaDTO);
         return ResponseEntity.ok(asesoriaActualizada);
