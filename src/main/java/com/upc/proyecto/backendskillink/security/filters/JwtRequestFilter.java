@@ -38,8 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // ENDPOINTS QUE NO REQUIREN JWT
         if (path.equals("/api/authenticate")
-                || path.startsWith("/Imagenes")
-                || path.equals("/api/skillink/cartillaasesor/listarcartilla")) {
+                || path.startsWith("/Imagenes")) {
 
             chain.doFilter(request, response);
             return;

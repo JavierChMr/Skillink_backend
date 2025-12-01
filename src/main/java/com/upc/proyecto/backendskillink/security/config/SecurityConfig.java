@@ -66,17 +66,16 @@ public class SecurityConfig {
                         // Registro de usuario público
                         .requestMatchers("/api/skillink/usuario/registrar").permitAll()
                         .requestMatchers("/api/skillink/asesor/registrar").permitAll()
-
+                        .requestMatchers("/api/skillink/administrador/registrar").permitAll()
+                        .requestMatchers("/api/skillink/asesoria/listar").permitAll()
                         // Este SÍ debe ser público para mostrar carta de asesores
                         .requestMatchers("/api/skillink/cartillaasesor/listarcartilla").permitAll()
-
                         // ⚠ Quita esto: ya no debe ser público, lo controlarás por @PreAuthorize
                         // .requestMatchers("/api/skillink/administrador/").permitAll()
-
                         // Si estos realmente deben ser públicos, déjalos:
-                        .requestMatchers("/api/asesorias/").permitAll()
-                        .requestMatchers("/api/skillink/verasesoria/").permitAll()
-                        .requestMatchers("/api/skillink/temasesoria/").permitAll()
+                        .requestMatchers("/api/skillink/asesoria/listar").permitAll()
+                        .requestMatchers("/api/skillink/verasesoria/**").permitAll()
+                        .requestMatchers("/api/skillink/temasesoria/**").permitAll()
 
                         // Para mostrar imágenes
                         .requestMatchers("/Imagenes/**").permitAll()

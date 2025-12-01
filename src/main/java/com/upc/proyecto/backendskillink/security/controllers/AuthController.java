@@ -27,26 +27,26 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
-    private final ClienteService clienteService;
-    private final AsesorService asesorService;
-    private final AdministradorService administradorService;
-    private final CustomUserDetailsService userDetailsService;
+  private final AuthenticationManager authenticationManager;
+  private final JwtUtil jwtUtil;
+  private final ClienteService clienteService;
+  private final AsesorService asesorService;
+  private final AdministradorService administradorService;
+  private final CustomUserDetailsService userDetailsService;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                          JwtUtil jwtUtil,
-                          ClienteService clienteService,
-                          AsesorService asesorService,
-                          AdministradorService administradorService,
-                          CustomUserDetailsService userDetailsService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-        this.clienteService = clienteService;
-        this.asesorService = asesorService;
-        this.administradorService = administradorService;
-        this.userDetailsService = userDetailsService;
-    }
+  public AuthController(AuthenticationManager authenticationManager,
+                        JwtUtil jwtUtil,
+                        ClienteService clienteService,
+                        AsesorService asesorService,
+                        AdministradorService administradorService,
+                        CustomUserDetailsService userDetailsService) {
+    this.authenticationManager = authenticationManager;
+    this.jwtUtil = jwtUtil;
+    this.clienteService = clienteService;
+    this.asesorService = asesorService;
+    this.administradorService = administradorService;
+    this.userDetailsService = userDetailsService;
+  }
 
   @PostMapping("/authenticate")
   public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid AuthRequestDTO authRequest) {
@@ -59,8 +59,8 @@ public class AuthController {
       // 2. Cargar el usuario completo
       var userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
-      // 3. Generar JWT
-      String token = jwtUtil.generateToken(userDetails.getUsername());
+      // 3. ✅ CAMBIO AQUÍ - Pasar UserDetails completo, NO solo el username
+      String token = jwtUtil.generateToken(userDetails); // ← CAMBIO CRÍTICO
 
       // 4. Extraer roles automáticamente desde CustomUserDetailsService
       Set<String> roles = userDetails.getAuthorities().stream()
@@ -82,5 +82,4 @@ public class AuthController {
       return ResponseEntity.status(500).body("Error interno del servidor");
     }
   }
-
 }
