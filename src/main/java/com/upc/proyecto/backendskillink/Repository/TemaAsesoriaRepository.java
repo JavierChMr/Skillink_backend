@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface TemaAsesoriaRepository extends JpaRepository<TemaAsesoria, Long> {
     List<TemaAsesoria> findByVerAsesoria_Idverasesoria(Long idverasesoria);
-
 }

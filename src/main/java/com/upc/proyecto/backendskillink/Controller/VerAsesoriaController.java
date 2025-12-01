@@ -27,6 +27,10 @@ public class VerAsesoriaController {
     public VerAsesoriaDTO obtenerVerAsesoriaPorId(@PathVariable Long idverasesoria) {
         return verAsesoriaService.obtenerVerAsesoriaPorId(idverasesoria);
     }
-
+    // NUEVO ENDPOINT - Buscar por ID de Asesoría
+    @GetMapping("/asesoria/{idasesoria}")
+    public VerAsesoriaDTO obtenerPorIdAsesoria(@PathVariable Long idasesoria) {
+        return verAsesoriaService.obtenerPorIdAsesoria(idasesoria);
+    }
 
 }

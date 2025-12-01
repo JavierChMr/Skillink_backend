@@ -11,4 +11,6 @@ import java.util.List;
 public interface ResenhaAsesoriaRepository extends JpaRepository<ResenhaAsesoria,Long> {
     List<ResenhaAsesoria> findByPuntajeresenha(Integer puntajeresenha);
     List<ResenhaAsesoria> findByFecharesenha(LocalDate fecharesenha);
+
+
 }
